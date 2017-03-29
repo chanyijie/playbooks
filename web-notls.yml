@@ -1,0 +1,23 @@
+- name: Configure webserver with nginx
+  hosts: webservers
+  sudo: True
+  tasks:
+      - name: install the latest version of nginx
+        yum: name=nginx  state=latest 
+      
+      - name: copy nginx config file
+        copy: src=files/nginx.conf dest=/etc/nginx
+
+      #- name: enable configuration
+      #  file: >
+       #      dest=/etc/nginx
+        #     src=/etc/nginx
+         #    state=link
+     
+      - name: copy index.html
+        template: >
+             src=template/index.html.j2 
+             dest=/usr/share/nginx/html/index.html 
+             mode=0644
+      - name: restart nginx
+        service: name=nginx state=restarted
